@@ -6,13 +6,12 @@ pipeline {
             agent {
                 docker {
                     image 'amazon/aws-cli'
-
                 }
-                steps {
-                    sh '''
-                        mvn -v
-                    '''
-                }
+            }
+            steps {
+                sh '''
+                    mvn -v
+                '''
             }
         }
     }
