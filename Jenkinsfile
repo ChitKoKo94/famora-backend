@@ -15,6 +15,20 @@ pipeline {
                 '''
             }
         }
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                }
+            }
+            steps {
+                sh '''
+                    amazon-linux-extras install docker
+                    ls -la
+                    docker images ls
+                '''
+            }
+        }
     }
 
     post {
