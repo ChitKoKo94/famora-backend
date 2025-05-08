@@ -5,6 +5,10 @@ pipeline {
         }
     }
 
+    environment {
+        PATH='${env.WORKSPACE}/aws-cli-bin:${env.PATH}'
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -13,7 +17,7 @@ pipeline {
                     apt-get update && apt-get install -y curl unzip
                     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
                     unzip awscliv2.zip
-                    ./aws/install
+                    ./aws/install --install-dir $WORKSPACE/aws-cli --bin-dir $WORKSPACE/aws-cli-bin
                     aws --version
                 '''
             }
