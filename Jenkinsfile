@@ -23,6 +23,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    yum update -y
                     amazon-linux-extras install docker
                     ls -la
                     docker images ls
