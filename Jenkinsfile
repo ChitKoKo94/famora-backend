@@ -9,6 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
+                    rm -rf aws aws-cli aws-cli-bin awscliv2.zip
                     apk update && apk add --no-cache curl unzip
                     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
                     unzip -o awscliv2.zip
