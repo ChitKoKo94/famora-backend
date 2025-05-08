@@ -19,12 +19,11 @@ pipeline {
             agent {
                 docker {
                     image 'amazon/aws-cli'
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
                 }
             }
             steps {
                 sh '''
-                    yum update -y
-                    amazon-linux-extras install docker
                     ls -la
                     docker images ls
                 '''
