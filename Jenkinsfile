@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh '''
                     mvn -v
-                    mvn clean package
+                    mvn -Dmaven.repo.local=$PWD/.m2 clean package
                 '''
             }
         }
