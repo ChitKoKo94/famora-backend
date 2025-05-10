@@ -15,13 +15,11 @@ pipeline {
             }
             steps {
                 sh '''
-
-                    rm -rf /var/jenkins_home/workspaces/*
-                    #mvn -v
-                    #mvn -Dmaven.repo.local=$PWD/.m2 clean package
+                    mvn -v
+                    mvn -Dmaven.repo.local=$PWD/.m2 clean package
                 '''
             }
-        }/*
+        }
         stage('Deploy') {
             agent {
                 docker {
@@ -34,7 +32,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                         #amazon-linux-extras install docker
-                        #ls
+                        ls
                         #docker build -f target -t $AWS_DOCKER_REGISTRY/$APP_IMAGE_NAME:$BUILD_ID .
                         #aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_DOCKER_REGISTRY
                         #docker push $AWS_DOCKER_REGISTRY/$APP_IMAGE_NAME:$BUILD_ID
@@ -42,7 +40,7 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
     }
 
     post {
