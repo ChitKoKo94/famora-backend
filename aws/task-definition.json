@@ -2,7 +2,7 @@
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "family": "learn-jenkins-app-img",
+  "family": "Springboot-Task-Prod",
   "containerDefinitions": [
     {
       "name": "springboot-img",
@@ -20,7 +20,7 @@
           "appProtocol": "http"
         }
       ],
-      "image": "211125607599.dkr.ecr.us-west-2.amazonaws.com/famora-springboot-app:35",
+      "image": "211125607599.dkr.ecr.us-west-2.amazonaws.com/famora-springboot-app:#APP_VERSION#",
       "essential": true
     }
   ],

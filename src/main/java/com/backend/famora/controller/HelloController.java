@@ -13,6 +13,11 @@ public class HelloController {
     @Autowired
     UserProfileRepo repo;
 
+    @GetMapping("health")
+    public Mono<ResponseEntity<String>> health() {
+        return Mono.just(ResponseEntity.ok("healthy"));
+    }
+
     @GetMapping("hello")
     public Mono<ResponseEntity<UserProfile>> hello() {
         return repo.getUserProfileById("sd3212asd12").map(ResponseEntity::ok);
