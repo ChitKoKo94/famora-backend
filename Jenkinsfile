@@ -61,7 +61,7 @@ pipeline {
                         #aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_DOCKER_REGISTRY
                         #docker push $AWS_DOCKER_REGISTRY/$APP_IMAGE_NAME:$BUILD_ID
 
-                        LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json | jq '.taskDefinition.revision')
+                        LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition.json | jq '.taskDefinition.revision')
                         aws ecs update-service --cluster LearnJenkinsApp-CKK-Cluster-Prod \
                         --service LearnJenkinsApp-Task-Prod-service-mf18smk5 \
                         --task-definition Springboot-Task-Prod:$LATEST_TD_REVISION
