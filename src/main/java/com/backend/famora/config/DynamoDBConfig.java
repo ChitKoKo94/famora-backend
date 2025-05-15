@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.regions.Region;
@@ -14,23 +15,21 @@ import java.net.URI;
 
 @Configuration
 public class DynamoDBConfig {
-    @Value("${aws.dynamo.endPoint}")
-    private String dbEndPoint;
     @Value("${aws.region}")
     private String awsRegion;
-    @Value("${aws.dynamo.accessKey}")
-    private String accessKey;
-    @Value("${aws.dynamo.secret}")
-    private String secretKey;
 
     @Bean
-    public DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient() {
+    public DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient(DynamoDbAsyncClient dynamoDbAsyncClient) {
         return DynamoDbEnhancedAsyncClient.builder()
-                .dynamoDbClient(buildAsyncDynamoDbClient())
+                .dynamoDbClient(dynamoDbAsyncClient)
                 .build();
     }
 
-    private DynamoDbAsyncClient buildAsyncDynamoDbClient() {
+    @Bean
+    @Profile("dev")
+    public DynamoDbAsyncClient buildAsyncDynamoDbClientDev(@Value("${aws.dynamo.endPoint}") String dbEndPoint,
+                                                           @Value("${aws.dynamo.accessKey}") String accessKey,
+                                                           @Value("${aws.dynamo.secret}") String secretKey) {
         return DynamoDbAsyncClient.builder()
                 .region(Region.of(awsRegion))
                 .endpointOverride(URI.create(dbEndPoint))
@@ -39,6 +38,15 @@ public class DynamoDBConfig {
                             AwsBasicCredentials.create(accessKey, secretKey)
                         )
                 )
+                .build();
+    }
+
+    @Bean
+    @Profile("prod")
+    public DynamoDbAsyncClient buildAsyncDynamoDbClientProd() {
+        return DynamoDbAsyncClient.builder()
+                .region(Region.of(awsRegion))
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .build();
     }
 }
