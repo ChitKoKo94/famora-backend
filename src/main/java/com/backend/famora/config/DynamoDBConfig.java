@@ -54,6 +54,8 @@ public class DynamoDBConfig {
     @Bean
     @ConditionalOnMissingBean(DynamoDbAsyncClient.class)
     public DynamoDbAsyncClient fallbackClient() {
-        return DynamoDbAsyncClient.builder().build();
+        return DynamoDbAsyncClient.builder()
+                .region(Region.of(awsRegion))
+                .build();
     }
 }
