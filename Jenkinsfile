@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh '''
                     mvn -v
-                    mvn -Dmaven.repo.local=$PWD/.m2 clean package
+                    mvn -Dspring.profiles.active=dev -Dmaven.repo.local=$PWD/.m2 clean package
                 '''
             }
         }
