@@ -11,8 +11,8 @@
 	<groupId>com.backend</groupId>
 	<artifactId>famora</artifactId>
 	<version>0.0.1</version>
-	<name>famora</name>
-	<description>Backend service for Famora</description>
+	<name>fambien</name>
+	<description>Backend service for Fambien</description>
 	<url/>
 	<licenses>
 		<license/>

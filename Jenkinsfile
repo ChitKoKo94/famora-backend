@@ -4,7 +4,7 @@ pipeline {
     environment {
         SPRINGBOOT_APP_VERSION = "1.0.$BUILD_ID"
         AWS_DEFAULT_REGION = 'us-west-2'
-        APP_IMAGE_NAME = 'famora-springboot-app'
+        APP_IMAGE_NAME = 'fambien-springboot-app'
         AWS_DOCKER_REGISTRY = '211125607599.dkr.ecr.us-west-2.amazonaws.com'
     }
 

@@ -1,6 +1,6 @@
-package com.backend.famora.entity;
+package com.backend.fambien.entity;
 
-import com.backend.famora.enums.FamoType;
+import com.backend.fambien.enums.FamoType;
 import lombok.Data;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;

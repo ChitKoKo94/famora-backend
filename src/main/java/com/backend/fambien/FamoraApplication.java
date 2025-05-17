@@ -1,4 +1,4 @@
-package com.backend.famora;
+package com.backend.fambien;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -20,7 +20,7 @@
           "appProtocol": "http"
         }
       ],
-      "image": "211125607599.dkr.ecr.us-west-2.amazonaws.com/famora-springboot-app:#APP_VERSION#",
+      "image": "211125607599.dkr.ecr.us-west-2.amazonaws.com/fambien-springboot-app:#APP_VERSION#",
       "essential": true
     }
   ],

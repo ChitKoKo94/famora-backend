@@ -1,4 +1,4 @@
-package com.backend.famora.config;
+package com.backend.fambien.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

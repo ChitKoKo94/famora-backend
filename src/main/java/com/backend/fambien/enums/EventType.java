@@ -1,4 +1,4 @@
-package com.backend.famora.enums;
+package com.backend.fambien.enums;
 
 public enum EventType {
     DINNER,

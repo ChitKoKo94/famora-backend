@@ -1,6 +1,6 @@
-package com.backend.famora.entity;
+package com.backend.fambien.entity;
 
-import com.backend.famora.enums.EventType;
+import com.backend.fambien.enums.EventType;
 
 import java.util.List;
 

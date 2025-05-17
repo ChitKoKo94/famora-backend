@@ -1,4 +1,4 @@
-package com.backend.famora;
+package com.backend.fambien;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

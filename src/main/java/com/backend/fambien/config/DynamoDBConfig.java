@@ -1,4 +1,4 @@
-package com.backend.famora.config;
+package com.backend.fambien.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

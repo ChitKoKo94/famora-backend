@@ -1,4 +1,4 @@
-package com.backend.famora.entity;
+package com.backend.fambien.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,10 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 public class UserProfile {
 
     private String id;
+    private String userName;
+    private String email;
     private String firstName;
     private String lastName;
-    private String userName;
     // list famo
     // list event
 
