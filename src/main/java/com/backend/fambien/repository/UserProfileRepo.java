@@ -22,13 +22,17 @@ public class UserProfileRepo {
     }
 
     public Mono<UserProfile> getUserProfileById(String id) {
-        Key key = Key.builder().partitionValue(id).build();
+        Key key = Key.builder()
+                .partitionValue(id)
+                .build();
         return Mono.fromFuture(userProfileTable.getItem(key));
     }
 
     public Mono<UserProfile> getUserProfileByEmail(String email) {
         QueryConditional queryConditional = QueryConditional
-                .keyEqualTo(Key.builder().partitionValue(email).build());
+                .keyEqualTo(Key.builder()
+                        .partitionValue(email)
+                        .build());
         QueryEnhancedRequest request = QueryEnhancedRequest.builder()
                 .queryConditional(queryConditional)
                 .build();

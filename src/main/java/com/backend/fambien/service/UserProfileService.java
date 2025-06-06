@@ -3,7 +3,7 @@ package com.backend.fambien.service;
 import com.backend.fambien.entity.UserProfile;
 import reactor.core.publisher.Mono;
 
-public interface UserService {
+public interface UserProfileService {
 
     Mono<UserProfile> getProfileById(String id);
 

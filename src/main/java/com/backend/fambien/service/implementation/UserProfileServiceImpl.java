@@ -2,15 +2,15 @@ package com.backend.fambien.service.implementation;
 
 import com.backend.fambien.entity.UserProfile;
 import com.backend.fambien.repository.UserProfileRepo;
-import com.backend.fambien.service.UserService;
+import com.backend.fambien.service.UserProfileService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-class UserServiceImpl implements UserService {
+class UserProfileServiceImpl implements UserProfileService {
     private final UserProfileRepo profileRepo;
 
-    UserServiceImpl(UserProfileRepo profileRepo) {
+    UserProfileServiceImpl(UserProfileRepo profileRepo) {
         this.profileRepo = profileRepo;
     }
 
