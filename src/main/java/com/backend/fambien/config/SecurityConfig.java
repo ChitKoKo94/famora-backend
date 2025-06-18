@@ -34,9 +34,13 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint((swe, e) ->
-                                Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED))
-                        )
+                        .authenticationEntryPoint((swe, e) -> {
+                            if (swe.getAttributes().get("expired-token") instanceof Boolean isExpired && isExpired) {
+                                swe.getResponse().getHeaders().add("WWW-Authenticate", "access token expired");
+                            }
+                            swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                            return Mono.empty();
+                        })
                         .accessDeniedHandler((swe, e) ->
                                 Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN))
                         )
@@ -47,14 +51,13 @@ public class SecurityConfig {
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepo)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .pathMatchers("/public/**", "/health", "/hello").permitAll()
                         //.pathMatchers("/admin/**").hasRole("ADMIN") // Admin-only endpoints
                         .anyExchange().authenticated() // All other requests require authentication
                 )
                 .build();
     }
-
 
     /**
      * Provides a PasswordEncoder bean.

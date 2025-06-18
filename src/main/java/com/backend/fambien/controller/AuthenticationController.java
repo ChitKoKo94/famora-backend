@@ -2,6 +2,7 @@ package com.backend.fambien.controller;
 
 import com.backend.fambien.dto.AuthRequest;
 import com.backend.fambien.dto.AuthResponse;
+import com.backend.fambien.dto.RefreshTokenRequest;
 import com.backend.fambien.service.UserAccountService;
 import com.backend.fambien.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +34,18 @@ public class AuthenticationController {
      * @param authRequest The authentication request containing username and password.
      * @return A Mono emitting a ResponseEntity with the JWT or an error status.
      */
-    @PostMapping("/login")
+    @PostMapping("/token")
     public Mono<ResponseEntity<AuthResponse>> login(@RequestBody AuthRequest authRequest) {
         log.info("Login attempt for user: {}", authRequest.username());
         return userAccountService.authenticateUser(authRequest.username(), authRequest.password())
                 .flatMap(userDetails ->
                         Mono.just(ResponseEntity.ok(
-                                new AuthResponse(jwtUtil.generateToken(userDetails.getUsername()))
-                        )))
+                                new AuthResponse(
+                                        jwtUtil.generateToken(userDetails.getUsername()),
+                                        jwtUtil.generateRefreshToken(userDetails.getUsername()),
+                                        null)
+                        ))
+                )
                 .onErrorResume(BadCredentialsException.class, e -> {
                     log.warn("Invalid user: {}, {}", authRequest.username(), e.getMessage());
                     return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -49,5 +54,31 @@ public class AuthenticationController {
                     log.warn("An unexpected error : {}, {}", authRequest.username(), e.getMessage(), e);
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
                 });
+    }
+
+    /**
+     * Authenticates the user with provided refresh-token and returns a JWT if successful.
+     *
+     * @param request The authentication request containing refresh-token.
+     * @return A Mono emitting a ResponseEntity with the new JWT or an error status.
+     */
+    @PostMapping("/refresh-token")
+    public Mono<ResponseEntity<AuthResponse>> refreshToken(@RequestBody RefreshTokenRequest request) {
+        log.info("Refreshing expired access token");
+        if (jwtUtil.isTokenExpired(request.refreshToken())) {
+            log.info("Refreshing expired token");
+            return Mono.just(new ResponseEntity<AuthResponse>(
+                    new AuthResponse(null,
+                            null,
+                            "refresh token expired"),
+                    HttpStatus.UNAUTHORIZED));
+        }
+        String username = jwtUtil.extractUsername(request.refreshToken());
+        return Mono.just(ResponseEntity.ok(
+                new AuthResponse(
+                        jwtUtil.generateToken(username),
+                        request.refreshToken(),
+                        null)
+        ));
     }
 }

@@ -1,5 +1,6 @@
 package com.backend.fambien.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,12 +27,12 @@ public class SecurityContextRepo implements ServerSecurityContextRepository {
     }
 
     /**
-     * Loads the SecurityContext from the request.
-     * It extracts the JWT from the Authorization header, creates an unauthenticated token,
+     * Loads the SecurityContext from the request.<br>
+     * It extracts the JWT from the Authorization header
      * and then uses the JwtAuthenticationManager to authenticate it.
      *
      * @param exchange The current server web exchange.
-     * @return A Mono emitting the SecurityContext if authentication is successful, or empty if not.
+     * @return A Mono emitting the SecurityContext if authentication is successful
      */
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
@@ -41,8 +42,10 @@ public class SecurityContextRepo implements ServerSecurityContextRepository {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
             return authenticationManager.authenticate(auth)
                     .map(authentication -> (SecurityContext) new SecurityContextImpl(authentication))
-                    .onErrorResume(e -> {
-                        log.error(e.getMessage(), e);
+                    .onErrorResume(ex -> {
+                        if (ex instanceof ExpiredJwtException) {
+                            exchange.getAttributes().put("expired-token", true);
+                        }
                         return Mono.empty();
                     });
         }

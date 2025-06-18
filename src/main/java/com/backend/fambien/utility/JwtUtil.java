@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -84,7 +83,12 @@ public final class JwtUtil {
      * @return True if the token is expired, false otherwise.
      */
     public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        }
+        catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
     /**
@@ -99,6 +103,22 @@ public final class JwtUtil {
                 .subject(username)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expirationMilliSec))
+                .signWith(key)
+                .compact();
+    }
+
+    /**
+     * Creates the Refresh JWT token with username, and expiration.
+     *
+     * @param username The subject of the token (usually the username).
+     * @return The Refresh JWT token.
+     */
+    public String generateRefreshToken(String username) {
+        Date now = new Date();
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(now)
+                .expiration(new Date(now.getTime() + (expirationMilliSec * 2)))
                 .signWith(key)
                 .compact();
     }
